@@ -22,22 +22,22 @@ double coord_fisica_2D(double s, double t, double *v) {
     return soma;
 }
 
-double derivada_parcial_s_2(double p, double (*raiz) (double p, double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v), double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v) {
+double derivada_parcial_s_2(double p, double s, double t, double *v) {
     
-    double raiz_com_h = raiz(p, coord_fis_2D, s+H, t, v);
-    double raiz_sem_h = raiz(p, coord_fis_2D, s, t, v);
+    double raiz_com_h = raiz_2D(p, s+H, t, v);
+    double raiz_sem_h = raiz_2D(p, s, t, v);
     return (raiz_com_h - raiz_sem_h) / H;
 }
 
-double derivada_parcial_t_2(double p, double (*raiz) (double p, double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v), double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v) {
-    double raiz_com_h = raiz(p, coord_fis_2D, s, t+H, v);
-    double raiz_sem_h = raiz(p, coord_fis_2D, s, t, v);
+double derivada_parcial_t_2(double p, double s, double t, double *v) {
+    double raiz_com_h = raiz_2D(p, s, t+H, v);
+    double raiz_sem_h = raiz_2D(p, s, t, v);
     return (raiz_com_h - raiz_sem_h) / H;
 }
 
-double raiz_2D(double p, double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v)
+double raiz_2D(double p,double s,double t, double *v)
 {
-    return (p - coord_fis_2D(s, t, v));
+    return (p - coord_fisica_2D(s, t, v));
 }
 
 int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, double *t, double tol)
@@ -57,13 +57,13 @@ int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, 
     vs[0] = vs[1] = 0;
     
     while (fabs(x - coord_fisica_2D(vs[0], vs[1], vx)) >= tol || fabs(y - coord_fisica_2D(vs[0], vs[1], vy)) >= tol) {
-        vf[0] = -raiz_2D(x, coord_fisica_2D, vs[0], vs[1], vx);  // função u(s,t)
-        vf[1] = -raiz_2D(y, coord_fisica_2D, vs[0], vs[1], vy);  // função v(s,t)
+        vf[0] = -raiz_2D(x, vs[0], vs[1], vx);  // função u(s,t)
+        vf[1] = -raiz_2D(y, vs[0], vs[1], vy);  // função v(s,t)
         
-        J[0][0] = derivada_parcial_s_2(x, raiz_2D, coord_fisica_2D, vs[0], vs[1], vx);  // derivada parcial de u em s
-        J[0][1] = derivada_parcial_t_2(x, raiz_2D, coord_fisica_2D, vs[0], vs[1], vx);  // derivada parcial de u em t
-        J[1][0] = derivada_parcial_s_2(y, raiz_2D, coord_fisica_2D, vs[0], vs[1], vy);  // derivada parcial de v em s
-        J[1][1] = derivada_parcial_t_2(y, raiz_2D, coord_fisica_2D, vs[0], vs[1], vy);  // derivada parcial de v em t
+        J[0][0] = derivada_parcial_s_2(x, vs[0], vs[1], vx);  // derivada parcial de u em s
+        J[0][1] = derivada_parcial_t_2(x, vs[0], vs[1], vx);  // derivada parcial de u em t
+        J[1][0] = derivada_parcial_s_2(y, vs[0], vs[1], vy);  // derivada parcial de v em s
+        J[1][1] = derivada_parcial_t_2(y, vs[0], vs[1], vy);  // derivada parcial de v em t
         
         sist_linear(2, J, vf, vh);
         

@@ -16,11 +16,11 @@
 
 double coord_fisica_2D(double s, double t, double *v);  // função que calcula a coordenada física de um ponto (s,t) dado um vetor de vértices v
 
-double derivada_parcial_s_2(double p, double (*raiz) (double p, double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v), double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v);  // derivada parcial em s para duas variáveis
+double derivada_parcial_s_2(double p, double s, double t, double *v);
 
-double derivada_parcial_t_2(double p, double (*raiz) (double p, double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v), double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v);  // derivada parcial em t para duas variáveis
+double derivada_parcial_t_2(double p, double s, double t, double *v);
 
-double raiz_2D(double p, double (*coord_fis_2D) (double s, double t, double *v), double s, double t, double *v);  // função genérica definida como u(s,t) e v(s,t) expressas no enunciado
+double raiz_2D(double p, double s, double t, double *v);  // função genérica definida como u(s,t) e v(s,t) expressas no enunciado
 
 int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, double *t, double tol);  // função que calcula (s,t) dados o par de pontos (x,y), os vetores dos vértices e a tolerância, retornando o número de iterações
 
