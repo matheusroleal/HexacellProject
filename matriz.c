@@ -1,3 +1,11 @@
+//
+//  matriz.c
+//  HexaCellLocal
+//
+//  Created by Felipe Viberti on 05/12/19.
+//  Copyright © 2019 Felipe Viberti. All rights reserved.
+//
+
 #include "matriz.h"
 #include <stdlib.h>
 #include <stdio.h>

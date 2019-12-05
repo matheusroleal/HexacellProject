@@ -1,9 +1,15 @@
+//
+//  sistlinear.c
+//  HexaCellLocal
+//
+//  Created by Felipe Viberti on 05/12/19.
+//  Copyright © 2019 Felipe Viberti. All rights reserved.
+//
+//
 #include "sistlinear.h"
 #include <stdlib.h>
-#include <math.h>
  
-int* fatoracao (int n, double** a)
-{
+int* fatoracao (int n, double** a) {
   int* p = (int*) malloc(n*sizeof(int));
   for (int i=0; i<n; ++i)
     p[i] = i;
@@ -55,3 +61,13 @@ double* substituicao (int n, double** a, int* p, double* b)
 }
 
 
+void sist_linear(int n, double **A, double *b, double *x)
+{
+    int *p = fatoracao(n, A);
+    
+    free(x);
+    
+    x = substituicao(n, A, p, b);
+    
+    free(p);
+}
