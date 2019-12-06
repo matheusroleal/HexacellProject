@@ -40,8 +40,7 @@ int* fatoracao (int n, double** a) {
   return p;
 }
 
-double* substituicao (int n, double** a, int* p, double* b)
-{
+double* substituicao (int n, double** a, int* p, double* b) {
   double* x = (double*) malloc(n*sizeof(double));
   // forward substitution
   for (int i=0; i<n; ++i) {
@@ -61,11 +60,12 @@ double* substituicao (int n, double** a, int* p, double* b)
 }
 
 
-void sist_linear(int n, double **A, double *b, double *x)
-{
+void sist_linear(int n, double **A, double *b, double *x) {
     int *p = fatoracao(n, A);
     
-    free(x);
+    if(x != NULL) {
+        free(x);
+    }
     
     x = substituicao(n, A, p, b);
     

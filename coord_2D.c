@@ -24,51 +24,52 @@ double coord_fisica_2D(double s, double t, double *v) {
 
 double derivada_parcial_s_2(double p, double s, double t, double *v) {
     
-    double raiz_com_h = raiz_2D(p, s+H, t, v);
-    double raiz_sem_h = raiz_2D(p, s, t, v);
+    double raiz_com_h = (p - coord_fisica_2D(s + H, t, v));
+    double raiz_sem_h = (p - coord_fisica_2D(s, t, v));
     return (raiz_com_h - raiz_sem_h) / H;
 }
 
 double derivada_parcial_t_2(double p, double s, double t, double *v) {
-    double raiz_com_h = raiz_2D(p, s, t+H, v);
-    double raiz_sem_h = raiz_2D(p, s, t, v);
+    double raiz_com_h = (p - coord_fisica_2D(s, t + H, v));
+    double raiz_sem_h = (p - coord_fisica_2D(s, t, v));
     return (raiz_com_h - raiz_sem_h) / H;
 }
 
-double raiz_2D(double p,double s,double t, double *v)
-{
-    return (p - coord_fisica_2D(s, t, v));
-}
-
-int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, double *t, double tol)
-{
-    double *vf = (double *)malloc(2*sizeof(double));  // vetor com as funções u e v definidas no enunciado
-    double *vh = (double *)malloc(2*sizeof(double));  // vetor passo a ser somado com a solução
-    double *vs = (double *)malloc(2*sizeof(double));  // vetor solução
-    double **J = mat_cria(2, 2);  // matriz Jacobiana
+int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, double *t, double tol) {
+    double *vf = (double *)malloc(2*sizeof(double));
+    double *vh = (double *)malloc(2*sizeof(double));
+    double *vs = (double *)malloc(2*sizeof(double));
+    double **J = mat_cria(2, 2);
     
     int i = 0;
     
     if (vf == NULL || vh == NULL || vs == NULL) {
-        puts("Erro de alocacao na memoria.");
+        puts("Erro malloc");
         exit(1);
     }
     
-    vs[0] = vs[1] = 0;
+    vs[0] = 0;
+    vs[1] = 0;
     
-    while (fabs(x - coord_fisica_2D(vs[0], vs[1], vx)) >= tol || fabs(y - coord_fisica_2D(vs[0], vs[1], vy)) >= tol) {
-        vf[0] = -raiz_2D(x, vs[0], vs[1], vx);  // função u(s,t)
-        vf[1] = -raiz_2D(y, vs[0], vs[1], vy);  // função v(s,t)
+    double coord_fis_x = coord_fisica_2D(vs[0], vs[1], vx);
+    double coord_fis_y = coord_fisica_2D(vs[0], vs[1], vy);
+    
+    while (fabs(x - coord_fis_x) >= tol || fabs(y - coord_fis_y) >= tol) {
+        vf[0] = -(x - coord_fisica_2D(vs[0], vs[1], vx));
+        vf[1] = -(y - coord_fisica_2D(vs[0], vs[1], vy));
         
-        J[0][0] = derivada_parcial_s_2(x, vs[0], vs[1], vx);  // derivada parcial de u em s
-        J[0][1] = derivada_parcial_t_2(x, vs[0], vs[1], vx);  // derivada parcial de u em t
-        J[1][0] = derivada_parcial_s_2(y, vs[0], vs[1], vy);  // derivada parcial de v em s
-        J[1][1] = derivada_parcial_t_2(y, vs[0], vs[1], vy);  // derivada parcial de v em t
+        J[0][0] = derivada_parcial_s_2(x, vs[0], vs[1], vx);
+        J[0][1] = derivada_parcial_t_2(x, vs[0], vs[1], vx);
+        J[1][0] = derivada_parcial_s_2(y, vs[0], vs[1], vy);
+        J[1][1] = derivada_parcial_t_2(y, vs[0], vs[1], vy);
         
         sist_linear(2, J, vf, vh);
         
         vs[0] += vh[0];
         vs[1] += vh[1];
+        
+        coord_fis_x = coord_fisica_2D(vs[0], vs[1], vx);
+        coord_fis_y = coord_fisica_2D(vs[0], vs[1], vy);
         
         i++;
     }

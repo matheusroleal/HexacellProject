@@ -10,5 +10,7 @@
 #include <stdlib.h>
 #include <math.h>
 int* fatoracao (int n, double** a);
+
 double* substituicao (int n, double** a, int* p, double* b);
+
 void sist_linear(int n, double **A, double *b, double *x);
