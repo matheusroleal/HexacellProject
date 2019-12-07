@@ -22,17 +22,17 @@ double coord_fisica_2D(double s, double t, double *v) {
     return soma;
 }
 
-double derivada_parcial_s_2(double p, double s, double t, double *v) {
+double calcula_derivada_parcial_2D(double p, double s, double t, double *v,int coordenada) {
+    double raiz_com_h,raiz_sem_h;
+    if (coordenada == 0) {
+        raiz_com_h = (p - coord_fisica_2D(s + H, t, v));
+    }
+    if (coordenada == 1) {
+        raiz_com_h = (p - coord_fisica_2D(s, t + H, v));
+    }
+     raiz_sem_h = (p - coord_fisica_2D(s, t, v));
+     return (raiz_com_h - raiz_sem_h) / H;
     
-    double raiz_com_h = (p - coord_fisica_2D(s + H, t, v));
-    double raiz_sem_h = (p - coord_fisica_2D(s, t, v));
-    return (raiz_com_h - raiz_sem_h) / H;
-}
-
-double derivada_parcial_t_2(double p, double s, double t, double *v) {
-    double raiz_com_h = (p - coord_fisica_2D(s, t + H, v));
-    double raiz_sem_h = (p - coord_fisica_2D(s, t, v));
-    return (raiz_com_h - raiz_sem_h) / H;
 }
 
 int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, double *t, double tol) {
@@ -58,10 +58,10 @@ int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, 
         vf[0] = -(x - coord_fisica_2D(vs[0], vs[1], vx));
         vf[1] = -(y - coord_fisica_2D(vs[0], vs[1], vy));
         
-        J[0][0] = derivada_parcial_s_2(x, vs[0], vs[1], vx);
-        J[0][1] = derivada_parcial_t_2(x, vs[0], vs[1], vx);
-        J[1][0] = derivada_parcial_s_2(y, vs[0], vs[1], vy);
-        J[1][1] = derivada_parcial_t_2(y, vs[0], vs[1], vy);
+        J[0][0] = calcula_derivada_parcial_2D(x, vs[0], vs[1], vx,0);
+        J[0][1] = calcula_derivada_parcial_2D(x, vs[0], vs[1], vx,1);
+        J[1][0] = calcula_derivada_parcial_2D(y, vs[0], vs[1], vy,0);
+        J[1][1] = calcula_derivada_parcial_2D(y, vs[0], vs[1], vy,1);
         
         sist_linear(2, J, vf, vh);
         

@@ -16,9 +16,7 @@
 
 double coord_fisica_2D(double s, double t, double *v);
 
-double derivada_parcial_s_2(double p, double s, double t, double *v);
-
-double derivada_parcial_t_2(double p, double s, double t, double *v);
+double calcula_derivada_parcial_2D(double p, double s, double t, double *v,int coordenada);
 
 int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, double *t, double tol);
 

@@ -16,11 +16,7 @@
 #include "matriz.h"
 double coord_fisica_3D(double s, double t, double r, double *v);
 
-double derivada_parcial_s_3(double p, double s, double t, double r, double *v);
-
-double derivada_parcial_t_3(double p, double s, double t, double r, double *v);
-
-double derivada_parcial_r_3(double p, double s, double t, double r, double *v);
+double calcula_derivada_parcial_3D(double p, double s, double t, double r, double *v,int coordenada);
 
 int coord_parametrica_3D(double x, double y, double z, double *vx, double *vy, double *vz, double *s, double *t, double *r, double tol);
 #endif /* coord_3D_h */

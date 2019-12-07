@@ -29,23 +29,22 @@ double coord_fisica_3D(double s, double t, double r, double *v) {
     return soma;
 }
 
-double derivada_parcial_s_3(double p, double s, double t, double r, double *v) {
-    double raiz_com_h = (p - coord_fisica_3D(s + H, t, r, v));
-    double raiz_sem_h = (p - coord_fisica_3D(s, t, r, v));
+double calcula_derivada_parcial_3D(double p, double s, double t, double r, double *v,int coordenada) {
+    double raiz_com_h,raiz_sem_h;
+    if(coordenada == 0) {
+        raiz_com_h = (p - coord_fisica_3D(s + H, t, r, v));
+    }
+    else if (coordenada == 1) {
+        raiz_com_h = (p - coord_fisica_3D(s, t + H, r, v));
+    }
+    else if (coordenada == 2){
+        raiz_com_h = (p - coord_fisica_3D(s, t, r + H, v));
+    }
+    raiz_sem_h = (p - coord_fisica_3D(s, t, r, v));
     return (raiz_com_h - raiz_sem_h) / H;
 }
 
-double derivada_parcial_t_3(double p, double s, double t, double r, double *v) {
-    double raiz_com_h = (p - coord_fisica_3D(s, t + H, r, v));
-    double raiz_sem_h = (p - coord_fisica_3D(s, t, r, v));
-    return (raiz_com_h - raiz_sem_h) / H;
-}
 
-double derivada_parcial_r_3(double p, double s, double t, double r, double *v) {
-    double raiz_com_h = (p - coord_fisica_3D(s, t, r + H, v));
-    double raiz_sem_h = (p - coord_fisica_3D(s, t, r, v));
-    return (raiz_com_h - raiz_sem_h) / H;
-}
 
 int coord_parametrica_3D(double x, double y, double z, double *vx, double *vy, double *vz, double *s, double *t, double *r, double tol) {
     double *vf = (double *)malloc(3*sizeof(double));
@@ -60,7 +59,9 @@ int coord_parametrica_3D(double x, double y, double z, double *vx, double *vy, d
         exit(1);
     }
     
-    vs[0] = vs[1] = vs[2] = 0;
+    vs[0] = 0;
+    vs[1] = 0;
+    vs[2] = 0;
     
     double coord_fisica_x = coord_fisica_3D(vs[0], vs[1], vs[2], vx);
     double coord_fisica_y = coord_fisica_3D(vs[0], vs[1], vs[2], vy);
@@ -71,15 +72,15 @@ int coord_parametrica_3D(double x, double y, double z, double *vx, double *vy, d
         vf[1] =  -(y - coord_fisica_3D(vs[0], vs[1], vs[2], vy));
         vf[2] = -(z - coord_fisica_3D(vs[0], vs[1], vs[2], vz));
         
-        J[0][0] = derivada_parcial_s_3(x,vs[0], vs[1], vs[2], vx);
-        J[0][1] = derivada_parcial_t_3(x, vs[0], vs[1], vs[2], vx);
-        J[0][2] = derivada_parcial_r_3(x, vs[0], vs[1], vs[2], vx);
-        J[1][0] = derivada_parcial_s_3(y, vs[0], vs[1], vs[2], vy);
-        J[1][1] = derivada_parcial_t_3(y, vs[0], vs[1], vs[2], vy);
-        J[1][2] = derivada_parcial_r_3(y, vs[0], vs[1], vs[2], vy);
-        J[2][0] = derivada_parcial_s_3(z, vs[0], vs[1], vs[2], vz);
-        J[2][1] = derivada_parcial_t_3(z,vs[0], vs[1], vs[2], vz);
-        J[2][2] = derivada_parcial_r_3(z,vs[0], vs[1], vs[2], vz);
+        J[0][0] = calcula_derivada_parcial_3D(x,vs[0], vs[1], vs[2], vx,0);
+        J[0][1] = calcula_derivada_parcial_3D(x, vs[0], vs[1], vs[2], vx,1);
+        J[0][2] = calcula_derivada_parcial_3D(x, vs[0], vs[1], vs[2], vx,2);
+        J[1][0] = calcula_derivada_parcial_3D(y, vs[0], vs[1], vs[2], vy,0);
+        J[1][1] = calcula_derivada_parcial_3D(y, vs[0], vs[1], vs[2], vy,1);
+        J[1][2] = calcula_derivada_parcial_3D(y, vs[0], vs[1], vs[2], vy,2);
+        J[2][0] = calcula_derivada_parcial_3D(z, vs[0], vs[1], vs[2], vz,0);
+        J[2][1] = calcula_derivada_parcial_3D(z,vs[0], vs[1], vs[2], vz,1);
+        J[2][2] = calcula_derivada_parcial_3D(z,vs[0], vs[1], vs[2], vz,2);
         
         sist_linear(3, J, vf, vh);
         
