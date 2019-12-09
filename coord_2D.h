@@ -14,14 +14,10 @@
 #include "sistlinear.h"
 #include "matriz.h"
 
-double coord_fisica_2D(double s, double t, double *v);  // função que calcula a coordenada física de um ponto (s,t) dado um vetor de vértices v
+double coord_fisica_2D(double s, double t, double *v);
 
-double derivada_parcial_s_2(double p, double s, double t, double *v);
+double calcula_derivada_parcial_2D(double p, double s, double t, double *v,int coordenada);
 
-double derivada_parcial_t_2(double p, double s, double t, double *v);
-
-double raiz_2D(double p, double s, double t, double *v);  // função genérica definida como u(s,t) e v(s,t) expressas no enunciado
-
-int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, double *t, double tol);  // função que calcula (s,t) dados o par de pontos (x,y), os vetores dos vértices e a tolerância, retornando o número de iterações
+int coord_parametrica_2D(double x, double y, double *vx, double *vy, double *s, double *t, double tol);
 
 #endif /* coord_2D_h */
