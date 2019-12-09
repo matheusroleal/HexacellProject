@@ -31,6 +31,9 @@ double coord_fisica_3D(double s, double t, double r, double *v) {
 
 double calcula_derivada_parcial_3D(double p, double s, double t, double r, double *v,int coordenada) {
     double raiz_com_h,raiz_sem_h;
+
+    raiz_com_h = 0.0;
+
     if(coordenada == 0) {
         raiz_com_h = (p - coord_fisica_3D(s + H, t, r, v));
     }
@@ -40,7 +43,9 @@ double calcula_derivada_parcial_3D(double p, double s, double t, double r, doubl
     else if (coordenada == 2){
         raiz_com_h = (p - coord_fisica_3D(s, t, r + H, v));
     }
+
     raiz_sem_h = (p - coord_fisica_3D(s, t, r, v));
+
     return (raiz_com_h - raiz_sem_h) / H;
 }
 
